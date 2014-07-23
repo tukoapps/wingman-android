@@ -92,8 +92,8 @@ public class LaunchActivity extends FragmentActivity{
 			    if (user != null) {
 			      Log.d("RESPONSE", "Hello " + user.getName() + "!");
 			      Intent main = new Intent(LaunchActivity.this, MainActivity.class);
-			      finish();
 			      startActivity(main);
+			      LaunchActivity.this.finish();
 			    }
 			  }
 			}).executeAsync();

@@ -80,8 +80,14 @@ public class MainActivity extends ActionBarActivity
 	    if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
 	        onSessionStateChange(session, session.getState(), null);
+	    }else{
+	    	Intent main = new Intent(MainActivity.this, LaunchActivity.class);
+		    startActivity(main);
+		    MainActivity.this.finish();
 	    }
-
+//	    String response = HttpRequest.get("http://www.get-wingman.com/api/v1/users").body();
+//	    System.out.println("Response was: " + response);
+	    
 //        updateView();
     }
 
@@ -180,6 +186,7 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+    
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
     	if (session != null && session.isOpened()) {
     		Log.d("DEBUG", "facebook session is open ");
@@ -204,6 +211,11 @@ public class MainActivity extends ActionBarActivity
 	 @Override
     public void onResume() {
         super.onResume();
+        Session session = Session.getActiveSession();
+	    if (session != null &&
+	           (session.isOpened() || session.isClosed()) ) {
+	        onSessionStateChange(session, session.getState(), null);
+	    }
         uiHelper.onResume();
     }
  
