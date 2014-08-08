@@ -25,14 +25,22 @@
 	        android:text="@string/instructions"
 	        android:autoLink="web"
 	        android:linksClickable="true"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:visibility="invisible" />
 
         <com.facebook.widget.LoginButton
             android:id="@+id/authButtonMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="56dp"
-            android:layout_marginTop="56dp" />
+            android:layout_marginTop="56dp"
+            android:visibility="invisible" />
+
+        <ListView
+            android:id="@+id/barListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
 
     </FrameLayout>
 

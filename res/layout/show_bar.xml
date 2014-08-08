@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/deets_back"
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+    
+    <ImageView
+        android:layout_width="138dip"
+        android:layout_height="138dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="6dip"
+        android:layout_marginTop="6dip"
+        android:id="@+id/deets_thumb"
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+        android:background="@drawable/white_border" />
+
+    <TextView
+        android:id="@+id/deets_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/deets_thumb"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/deets_thumb"
+        android:text="Rating: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFF" />
+
+    <TextView
+        android:id="@+id/deets_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/deets_rating"
+        android:layout_alignLeft="@+id/deets_rating"
+        android:text="Name: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFF" />
+
+</RelativeLayout>
