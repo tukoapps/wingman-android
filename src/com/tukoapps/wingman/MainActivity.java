@@ -61,6 +61,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +75,7 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private TextView info;
+    private ProgressBar loader;
     public String name = "";
     
     ArrayList<Bar> barList;
@@ -102,7 +104,10 @@ public class MainActivity extends ActionBarActivity
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         
-        info = (TextView) findViewById(R.id.info);
+        
+        loader = (ProgressBar) findViewById(R.id.loader);
+        loader.setVisibility(View.VISIBLE);
+        
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -138,13 +143,15 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+            	//Toast.makeText(this, "Profile View would appear", Toast.LENGTH_SHORT).show();
+                //mTitle = getString(R.string.title_section1);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+            	Toast.makeText(this, "Settings View would appear", Toast.LENGTH_SHORT).show();
+                //mTitle = getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                //mTitle = getString(R.string.title_section3);
                 Session session = Session.getActiveSession();
                 session.closeAndClearTokenInformation();
                 break;
@@ -321,9 +328,11 @@ public class MainActivity extends ActionBarActivity
             super.onPostExecute(result);
             //Log.d("JSON", "dsf" + result);
             if (!result.contains("fb_access_token")){
+            	loader.setVisibility(View.GONE);
             	displayBarList(result);
             }else{
             	getLocationAndGetBars(result);
+            	
             }
         }
     }
@@ -338,6 +347,9 @@ public class MainActivity extends ActionBarActivity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+     	LocationAlarm alarm = new LocationAlarm();
+//      alarm.CancelAlarm(this);
+    	alarm.SetAlarm(MainActivity.this, id);
     	Location loc = getLastLocation(this);
 //        Log.d("STRING", "http://wingman.ngrok.com/api/v1/bars?user_id="+id+"&lat="+loc.getLatitude()+"&lon="+loc.getLongitude());
     	new RequestTask().execute("http://www.get-wingman.com/api/v1/bars?user_id="+id+"&lat="+loc.getLatitude()+"&lon="+loc.getLongitude());
@@ -380,6 +392,7 @@ public class MainActivity extends ActionBarActivity
     	    //get the country information JSON object
     	    JSONObject json_bar = barListObj.getJSONObject(i);
     	    Bar new_bar = new Bar();
+    	    new_bar.setIndex(i);
     	    new_bar.setName(json_bar.getString("name"));
     	    new_bar.setRating(json_bar.getString("rating"));
     	    new_bar.setImage(json_bar.getString("image_url"));
@@ -422,6 +435,8 @@ public class MainActivity extends ActionBarActivity
     	 }
     
     
+    
+    
     private class MyCustomAdapter extends ArrayAdapter<Bar> {
     	 
     	  private ArrayList<Bar> barList;
@@ -446,11 +461,15 @@ public class MainActivity extends ActionBarActivity
     		  
     	   ViewHolder holder = null;
     	   Log.v("ConvertView", String.valueOf(position));
-    	   if (convertView == null) {
+    	   
+    	   Bar bar = barList.get(position);
+    	   
+    	   
+//    	   if (convertView == null) {
     		   LayoutInflater vi = (LayoutInflater)getSystemService(
   		    	     Context.LAYOUT_INFLATER_SERVICE);
     		   holder = new ViewHolder();
-    		   if (position == 0){
+    		   if (bar.getIndex() == 0){
     			   convertView = vi.inflate(R.layout.bar_info_first, null);
     			   holder.rating = (TextView) convertView.findViewById(R.id.code_first);
     	    	   holder.name = (TextView) convertView.findViewById(R.id.name_first);
@@ -464,11 +483,10 @@ public class MainActivity extends ActionBarActivity
     		   }
     		   
     		   convertView.setTag(holder);
-    	   } else {
-    	    holder = (ViewHolder) convertView.getTag();
-    	   }
-    	  
-    	   Bar bar = barList.get(position);
+//    	   } else {
+//    	    holder = (ViewHolder) convertView.getTag();
+//    	   }
+    	   
     	   holder.rating.setText(bar.getRating());
     	   holder.name.setText(bar.getName());
     	  

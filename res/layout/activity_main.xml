@@ -18,15 +18,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
-	        android:id="@+id/info"
-	        android:layout_width="match_parent"
+        <ProgressBar
+	        android:id="@+id/loader"
+	        style="?android:attr/progressBarStyleLarge"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/instructions"
-	        android:autoLink="web"
-	        android:linksClickable="true"
-	        android:textAppearance="?android:attr/textAppearanceMedium"
-	        android:visibility="invisible" />
+	        android:layout_gravity="center_vertical|center_horizontal"
+	        android:visibility="visible" 
+         />
 
         <com.facebook.widget.LoginButton
             android:id="@+id/authButtonMain"
@@ -41,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
         </ListView>
+
+      
 
     </FrameLayout>
 

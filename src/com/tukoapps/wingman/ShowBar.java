@@ -43,6 +43,7 @@ public class ShowBar extends Activity{
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		Bar bar = (Bar) getIntent().getParcelableExtra("BarDeets");
+//		bar.loadHeader();
 		name = (TextView) findViewById(R.id.deets_name);
 		rating = (TextView) findViewById(R.id.deets_rating);
 		back = (ImageView) findViewById(R.id.deets_back);

@@ -391,10 +391,10 @@ int id image 0x7f050029
 int id imageView1 0x7f050064
 int id image_back 0x7f050046
 int id image_first 0x7f050047
-int id info 0x7f050040
 int id large 0x7f05001b
 int id listMode 0x7f050001
 int id list_item 0x7f05002b
+int id loader 0x7f050040
 int id middle 0x7f050012
 int id name 0x7f050044
 int id name_first 0x7f050049

@@ -18,14 +18,13 @@ public class Bar implements Parcelable{
 	 String rating = "0.0";
 	 String name = null;
 	 Bitmap image = null;
-	 String region = null;
+	 int index = 0;
 	 Double lifeExpectancy = null;
 	 Double gnp = null;
 	 Double surfaceArea = null;
 	 int population = 0;
 	 
 	 public Bar(){
-		 
 	 }
 	  
 	 public String getRating() {
@@ -50,11 +49,11 @@ public class Bar implements Parcelable{
 	 public void setBitmap(Bitmap image){
 		 this.image = image;
 	 }
-	 public String getRegion() {
-	  return region;
+	 public int getIndex() {
+	  return this.index;
 	 }
-	 public void setRegion(String region) {
-	  this.region = region;
+	 public void setIndex(int index) {
+	  this.index = index;
 	 }
 	 public Double getLifeExpectancy() {
 	  return lifeExpectancy;

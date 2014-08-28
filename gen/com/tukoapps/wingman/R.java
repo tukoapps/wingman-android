@@ -1363,10 +1363,10 @@ containing a value of this type.
         public static final int imageView1=0x7f050064;
         public static final int image_back=0x7f050046;
         public static final int image_first=0x7f050047;
-        public static final int info=0x7f050040;
         public static final int large=0x7f05001b;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f05002b;
+        public static final int loader=0x7f050040;
         public static final int middle=0x7f050012;
         public static final int name=0x7f050044;
         public static final int name_first=0x7f050049;
