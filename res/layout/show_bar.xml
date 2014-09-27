@@ -12,50 +12,245 @@
         android:id="@+id/deets_back"
         android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
     
-    <ImageView
-        android:layout_width="138dip"
-        android:layout_height="138dip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="6dip"
-        android:layout_marginTop="6dip"
-        android:id="@+id/deets_thumb"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
-        android:background="@drawable/white_border" />
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="150dip"
+	    android:background="@drawable/linear_gradient">
+    
+	    <ImageView
+	        android:layout_width="138dip"
+	        android:layout_height="138dip"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginLeft="6dip"
+	        android:layout_marginTop="6dip"
+	        android:id="@+id/deets_thumb"
+	        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+	        android:background="@drawable/white_border" />
+	
+	    <TextView
+	        android:id="@+id/deets_rating"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@+id/deets_thumb"
+	        android:layout_marginLeft="15dp"
+	        android:layout_toRightOf="@+id/deets_thumb"
+	        android:text="Rating: "
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFF" />
+	
+	    <TextView
+	        android:id="@+id/deets_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/deets_rating"
+	        android:layout_alignLeft="@+id/deets_rating"
+	        android:text="Name: "
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFF" />
+	    
+	    
+	</RelativeLayout>
 
-    <TextView
-        android:id="@+id/deets_rating"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/deets_thumb"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/deets_thumb"
-        android:text="Rating: "
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFF" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/deets_back" >
 
-    <TextView
-        android:id="@+id/deets_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/deets_rating"
-        android:layout_alignLeft="@+id/deets_rating"
-        android:text="Name: "
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFF" />
+	    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+            
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/deets_back"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dip"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:background="#FFF"
-        android:padding="6dip"
-        android:text="Number of People There: 0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="80dip"
+	        android:layout_below="@+id/deets_back"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:id="@+id/rl1"
+	        android:padding="6dip" >
+		    
+	        <TextView
+	            android:id="@+id/textView1"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:layout_toRightOf="@+id/textView2"
+	            android:paddingLeft="30dip"
+	            android:text="People There"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <TextView
+	            android:id="@+id/textView2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="10dip"
+	            android:text="200+"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textSize="50dp" />
+	
+	        
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/rl2"
+	        android:layout_below="@+id/rl1"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:padding="6dip" >
+	
+	        <TextView
+	            android:id="@+id/tvDesc"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:layout_centerVertical="true"
+	            android:paddingLeft="10dip"
+	            android:paddingRight="10dip"
+	            android:gravity="center_vertical"
+	            android:text="This is where the bar description will be."
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="50dip"
+	        android:layout_below="@+id/rl2"
+	        android:id="@+id/rl3"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:padding="6dip" >
+		    
+	        <TextView
+	            android:id="@+id/tvMusic"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:layout_toRightOf="@+id/tvMusicPlace"
+	            android:paddingLeft="75dip"
+	            android:text="Dance"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <TextView
+	            android:id="@+id/tvMusicPlace"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="10dip"
+	            android:text="Music: "
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="50dip"
+	        android:layout_below="@+id/rl3"
+	        android:id="@+id/rl4"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:padding="6dip" >
+		    
+	        <TextView
+	            android:id="@+id/tvFood"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:layout_toRightOf="@+id/tvFoodPlace"
+	            android:paddingLeft="80dip"
+	            android:text="Mexican"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <TextView
+	            android:id="@+id/tvFoodPlace"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="10dip"
+	            android:text="Food: "
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/rl5"
+	        android:layout_below="@+id/rl4"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:padding="6dip" >
+	
+	        <TextView
+	            android:id="@+id/tvSched"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:layout_centerVertical="true"
+	            android:paddingLeft="10dip"
+	            android:paddingRight="10dip"
+	            android:gravity="center_vertical"
+	            android:text="This is where the bar schedule will be."
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </RelativeLayout>
+	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="50dip"
+	        android:layout_below="@+id/rl5"
+	        android:id="@+id/rl6"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="7dip"
+	        android:layout_marginBottom="8dip"
+	        android:layout_marginLeft="7dip"
+	        android:layout_marginRight="7dip"
+	        android:background="#DDD"
+	        android:padding="6dip" >
+		    
+	        <TextView
+	            android:id="@+id/tvDrinkPrice"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:layout_toRightOf="@+id/tvDrinkPlace"
+	            android:paddingLeft="50dip"
+	            android:text="$20.00"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <TextView
+	            android:id="@+id/tvDrinkPlace"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="10dip"
+	            android:text="Avg Drink: "
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </RelativeLayout>
+	    </LinearLayout>
+	  </ScrollView>
 
 </RelativeLayout>

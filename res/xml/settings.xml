@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+ 
+    <PreferenceCategory android:title="Error Settings" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefSendReport"
+            android:summary="Helps to fix bugs"
+            android:title="Send crash reports" >
+        </CheckBoxPreference>
+ 
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="About" >
+        <Preference
+    		android:title="Visit Website"
+    		android:summary="go to get-wingman.com">
+
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:data="http://www.get-wingman.com/" />
+
+  </Preference>
+    </PreferenceCategory>
+ 
+</PreferenceScreen>

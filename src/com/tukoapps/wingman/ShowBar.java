@@ -32,6 +32,12 @@ public class ShowBar extends Activity{
 	
 	private TextView name;
 	private TextView rating;
+	private TextView description;
+	private TextView schedule;
+	private TextView music;
+	private TextView food;
+	private TextView drink_price;
+	private TextView currentUsers;
 	private ImageView back;
 	private ImageView thumb;
 
@@ -46,13 +52,25 @@ public class ShowBar extends Activity{
 //		bar.loadHeader();
 		name = (TextView) findViewById(R.id.deets_name);
 		rating = (TextView) findViewById(R.id.deets_rating);
+		description = (TextView) findViewById(R.id.tvDesc);
 		back = (ImageView) findViewById(R.id.deets_back);
+		currentUsers = (TextView) findViewById(R.id.textView2);
 		thumb = (ImageView) findViewById(R.id.deets_thumb);
+		schedule = (TextView) findViewById(R.id.tvSched);
+		music = (TextView) findViewById(R.id.tvMusic);
+		food = (TextView) findViewById(R.id.tvFood);
+		drink_price = (TextView) findViewById(R.id.tvDrinkPrice);
 		
 		name.setText(bar.getName());
+		currentUsers.setText(bar.getUsers() + "+");
 		rating.setText(bar.getRating());
+		description.setText(bar.getDescription());
 		back.setImageBitmap(bar.getImage());
-		thumb.setImageBitmap(bar.getImage());
+		thumb.setImageBitmap(bar.getLogo());
+		schedule.setText(bar.getSchedule());
+		music.setText(bar.getMusic());
+		food.setText(bar.getFood());
+		drink_price.setText("$" + bar.getDrinkPrice());
 	}
 	
 	@Override
@@ -60,7 +78,7 @@ public class ShowBar extends Activity{
 	    switch (item.getItemId()) {
 	    // Respond to the action bar's Up/Home button
 	    case android.R.id.home:
-	        NavUtils.navigateUpFromSameTask(this);
+	    	finish();
 	        return true;
 	    }
 	    return super.onOptionsItemSelected(item);

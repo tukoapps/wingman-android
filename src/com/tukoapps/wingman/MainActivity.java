@@ -29,19 +29,23 @@ import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.tukoapps.wingman.MyLocation.LocationResult;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,10 +77,14 @@ public class MainActivity extends ActionBarActivity
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
+	
+	private final static String TAG = "MAIN ACTIVITY";
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private TextView info;
+    private TextView noBar;
     private ProgressBar loader;
-    public String name = "";
+    public static String name = "";
+    private String id;
+    private boolean oneanddone = false;
     
     ArrayList<Bar> barList;
     
@@ -106,6 +114,7 @@ public class MainActivity extends ActionBarActivity
         
         
         loader = (ProgressBar) findViewById(R.id.loader);
+        noBar = (TextView) findViewById(R.id.tvNoBar);
         loader.setVisibility(View.VISIBLE);
         
 
@@ -123,7 +132,7 @@ public class MainActivity extends ActionBarActivity
         Session session = Session.getActiveSession();
 	    if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
+//	        onSessionStateChange(session, session.getState(), null);
 	    }else{
 	    	Intent main = new Intent(MainActivity.this, LaunchActivity.class);
 		    startActivity(main);
@@ -147,7 +156,9 @@ public class MainActivity extends ActionBarActivity
                 //mTitle = getString(R.string.title_section1);
                 break;
             case 2:
-            	Toast.makeText(this, "Settings View would appear", Toast.LENGTH_SHORT).show();
+//            	Toast.makeText(this, "Settings View would appear", Toast.LENGTH_SHORT).show();
+            	Intent settings = new Intent(this, SettingActivity.class);
+            	startActivity(settings);            	
                 //mTitle = getString(R.string.title_section2);
                 break;
             case 3:
@@ -232,9 +243,10 @@ public class MainActivity extends ActionBarActivity
     }
     
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+    	Log.d("DEBUG", "session state changed");
     	if (session != null && session.isOpened()) {
     		Log.d("DEBUG", "facebook session is open ");
-    		// make request to the /me API
+    		// make request to the /me API;
     		Request.newMeRequest(session, new Request.GraphUserCallback() {
 			  // callback after Graph API response with user object
 			  @Override
@@ -242,7 +254,7 @@ public class MainActivity extends ActionBarActivity
 			    if (user != null) {
 			      Log.d("RESPONSE", "Hello " + user.getName() + "!");
 			      name = user.getName();
-			      
+			      mNavigationDrawerFragment.loadMenu(name);
 			      String access_token = Session.getActiveSession().getAccessToken();
 			      String fb_id = user.getId();
 			      new RequestTask().execute("http://www.get-wingman.com/api/v1/sessions/new?access_token=" + access_token);
@@ -259,11 +271,11 @@ public class MainActivity extends ActionBarActivity
 	 @Override
     public void onResume() {
         super.onResume();
-        Session session = Session.getActiveSession();
-	    if (session != null &&
-	           (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
-	    }
+//        Session session = Session.getActiveSession();
+//	    if (session != null &&
+//	           (session.isOpened() || session.isClosed()) ) {
+//	        onSessionStateChange(session, session.getState(), null);
+//	    }
         uiHelper.onResume();
     }
  
@@ -326,7 +338,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Log.d("JSON", "dsf" + result);
+            Log.d("JSON", "dsf" + result);
             if (!result.contains("fb_access_token")){
             	loader.setVisibility(View.GONE);
             	displayBarList(result);
@@ -339,45 +351,84 @@ public class MainActivity extends ActionBarActivity
     
     private void getLocationAndGetBars(String response){
     	JSONObject responseObj = null;
-    	String id = null;
+    	
      	try {
 			responseObj = new JSONObject(response);
 			id = responseObj.getString("id");
-		} catch (JSONException e) {
+     	} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+     	
      	LocationAlarm alarm = new LocationAlarm();
 //      alarm.CancelAlarm(this);
+     	final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+             
+	     	final AlertDialog.Builder builder =
+	                new AlertDialog.Builder(this);
+	        final String action = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+	        final String message = "To get better bar recommendations,"
+	            + " please enable location services. Click OK to go there now.";
+	 
+	        builder.setMessage(message)
+	            .setPositiveButton("OK",
+	                new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface d, int id) {
+	                        MainActivity.this.startActivity(new Intent(action));
+	                        d.dismiss();
+	                    }
+	            })
+	            .setNegativeButton("Cancel",
+	                new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface d, int id) {
+	                        d.cancel();
+	                    }
+	            });
+	        builder.create().show();
+        }
+        
+     	//turnGPSOn();
     	alarm.SetAlarm(MainActivity.this, id);
-    	Location loc = getLastLocation(this);
-//        Log.d("STRING", "http://wingman.ngrok.com/api/v1/bars?user_id="+id+"&lat="+loc.getLatitude()+"&lon="+loc.getLongitude());
-    	new RequestTask().execute("http://www.get-wingman.com/api/v1/bars?user_id="+id+"&lat="+loc.getLatitude()+"&lon="+loc.getLongitude());
+    	//Log.d("NOWWWW", "about to json");
+    	LocationResult locationResult = new LocationResult(){
+    	    @Override
+    	    public void gotLocation(Location location){
+    	        //Got the location!
+    	    	if (location == null){
+    	    		final AlertDialog.Builder builder =
+    		                new AlertDialog.Builder(MainActivity.this);
+    		        final String action = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+    		        final String message = "We need some sort of location services enabled"
+    		            + " so we can find bars near your area. Click OK to go there now.";
+    		 
+    		        builder.setMessage(message)
+    		            .setPositiveButton("OK",
+    		                new DialogInterface.OnClickListener() {
+    		                    public void onClick(DialogInterface d, int id) {
+    		                        MainActivity.this.startActivity(new Intent(action));
+    		                        d.dismiss();
+    		                    }
+    		            })
+    		            .setNegativeButton("Cancel",
+    		                new DialogInterface.OnClickListener() {
+    		                    public void onClick(DialogInterface d, int id) {
+    		                        d.cancel();
+    		                    }
+    		            });
+    		        builder.create().show();
+    		        loader.setVisibility(View.GONE);
+    	    	}else{
+    	    		new RequestTask().execute("http://www.get-wingman.com/api/v1/bars?user_id="+id+"&lat="+location.getLatitude()+"&lon="+location.getLongitude());
+    	    	}
+    	    }
+    	};
+    	MyLocation myLocation = new MyLocation();
+    	myLocation.getLocation(this, locationResult);
     }
     
-    public static Location getLastLocation(Context context) {
-        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        List<String> providers = manager.getProviders(criteria, true);
-        List<Location> locations = new ArrayList<Location>();
-        for (String provider : providers) {
-             Location location = manager.getLastKnownLocation(provider);
-             if (location != null && location.getAccuracy() !=0.0) {
-                 locations.add(location);
-             }
-        }
-        Collections.sort(locations, new Comparator<Location>() {
-            @Override
-            public int compare(Location location, Location location2) {
-                return (int) (location.getAccuracy() - location2.getAccuracy());
-            }
-        });
-        if (locations.size() > 0) {
-            return locations.get(0);
-        }
-        return null;
-    }
+    
     
     private void displayBarList(String response){
     	 
@@ -387,46 +438,57 @@ public class MainActivity extends ActionBarActivity
     	   JSONArray barListObj = new JSONArray(response);
     	  
     	   barList = new ArrayList<Bar>();
-    	   for (int i=0; i<barListObj.length(); i++){
-    	 
-    	    //get the country information JSON object
-    	    JSONObject json_bar = barListObj.getJSONObject(i);
-    	    Bar new_bar = new Bar();
-    	    new_bar.setIndex(i);
-    	    new_bar.setName(json_bar.getString("name"));
-    	    new_bar.setRating(json_bar.getString("rating"));
-    	    new_bar.setImage(json_bar.getString("image_url"));
-
-    	    //add to country array list
-    	    barList.add(new_bar);
+    	   if (barListObj.length() < 1){
+    		   noBar.setVisibility(View.VISIBLE);
+    	   }else{
+	    	   for (int i=0; i<barListObj.length(); i++){
+	    	 
+	    	    //get the country information JSON object
+	    	    JSONObject json_bar = barListObj.getJSONObject(i);
+	    	    Bar new_bar = new Bar(this);
+	    	    new_bar.setUsers(json_bar.getInt("current_users"));
+	    	    new_bar.setName(json_bar.getString("name"));
+	    	    new_bar.setRating(json_bar.getString("rating"));
+	    	    new_bar.setImage(json_bar.getString("image_url"));
+	    	    new_bar.setLogo(json_bar.getString("logo_url"));
+	    	    new_bar.setDescription(json_bar.getString("description"));
+	    	    new_bar.setSchedule(json_bar.getString("schedule"));
+	    	    new_bar.setFood(json_bar.getString("food"));
+	    	    new_bar.setMusic(json_bar.getString("music"));
+	    	    if (json_bar.isNull("drink_price"))
+	    	    	new_bar.setDrinkPrice(0.0);
+	    	    else
+	    	    	new_bar.setDrinkPrice(json_bar.getDouble("drink_price"));
+	
+	    	    //add to country array list
+	    	    barList.add(new_bar);
+	    	   }
+	    	   //create an ArrayAdaptar from the String Array
+	    	   dataAdapter = new MyCustomAdapter(this,
+	    	     R.layout.bar_info, barList);
+	    	   ListView listView = (ListView) findViewById(R.id.barListView);
+	    	   // Assign adapter to ListView
+	    	   listView.setAdapter(dataAdapter);
+	    	 
+	    	   //enables filtering for the contents of the given ListView
+	    	   listView.setTextFilterEnabled(true);
+	    	 
+	    	   listView.setOnItemClickListener(new OnItemClickListener() {
+	    	    
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					// TODO Auto-generated method stub
+					Bar bar = new Bar(MainActivity.this);
+					bar = (Bar) arg0.getItemAtPosition(arg2);
+					Intent show_bar = new Intent(MainActivity.this, ShowBar.class);
+					show_bar.putExtra("BarDeets", (Parcelable) bar);
+					startActivity(show_bar);
+	//	    	    Toast.makeText(getApplicationContext(),
+	//	    	      bar.getName(), Toast.LENGTH_SHORT).show();
+				}
+	    	   });
     	   }
-    	   //create an ArrayAdaptar from the String Array
-    	   dataAdapter = new MyCustomAdapter(this,
-    	     R.layout.bar_info, barList);
-    	   ListView listView = (ListView) findViewById(R.id.barListView);
-    	   // Assign adapter to ListView
-    	   listView.setAdapter(dataAdapter);
-    	 
-    	   //enables filtering for the contents of the given ListView
-    	   listView.setTextFilterEnabled(true);
-    	 
-    	   listView.setOnItemClickListener(new OnItemClickListener() {
-    	    
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				Bar bar = new Bar();
-				bar = (Bar) arg0.getItemAtPosition(arg2);
-				Intent show_bar = new Intent(MainActivity.this, ShowBar.class);
-				show_bar.putExtra("BarDeets", (Parcelable) bar);
-				startActivity(show_bar);
-//	    	    Toast.makeText(getApplicationContext(),
-//	    	      bar.getName(), Toast.LENGTH_SHORT).show();
-			}
-    	   });
-    	 
-    	 
     	 
     	  } catch (JSONException e) {
     	   e.printStackTrace();
@@ -449,10 +511,10 @@ public class MainActivity extends ActionBarActivity
     	  }
     	 
     	  private class ViewHolder {
-    	   TextView rating;
+    	   TextView users;
     	   TextView name;
-    	   ImageView image_thumb;
-    	   ImageView image_back;
+    	   ImageView logo;
+    	   ImageView image;
     	  }
     	 
     	  @Override
@@ -469,17 +531,17 @@ public class MainActivity extends ActionBarActivity
     		   LayoutInflater vi = (LayoutInflater)getSystemService(
   		    	     Context.LAYOUT_INFLATER_SERVICE);
     		   holder = new ViewHolder();
-    		   if (bar.getIndex() == 0){
+    		   if (position == 0){
     			   convertView = vi.inflate(R.layout.bar_info_first, null);
-    			   holder.rating = (TextView) convertView.findViewById(R.id.code_first);
+    			   holder.users = (TextView) convertView.findViewById(R.id.code_first);
     	    	   holder.name = (TextView) convertView.findViewById(R.id.name_first);
-    	    	   holder.image_back = (ImageView) convertView.findViewById(R.id.image_back);
-    	    	   holder.image_thumb = (ImageView) convertView.findViewById(R.id.image_first);
+    	    	   holder.image = (ImageView) convertView.findViewById(R.id.image_back);
+    	    	   holder.logo = (ImageView) convertView.findViewById(R.id.image_first);
     		   }else{
 		    	   convertView = vi.inflate(R.layout.bar_info, null);
-		    	   holder.rating = (TextView) convertView.findViewById(R.id.code);
+		    	   holder.users = (TextView) convertView.findViewById(R.id.code);
 		    	   holder.name = (TextView) convertView.findViewById(R.id.name);
-		    	   holder.image_thumb = (ImageView) convertView.findViewById(R.id.image);
+		    	   holder.logo = (ImageView) convertView.findViewById(R.id.image);
     		   }
     		   
     		   convertView.setTag(holder);
@@ -487,18 +549,20 @@ public class MainActivity extends ActionBarActivity
 //    	    holder = (ViewHolder) convertView.getTag();
 //    	   }
     	   
-    	   holder.rating.setText(bar.getRating());
+    	   holder.users.setText("" + bar.getUsers());
     	   holder.name.setText(bar.getName());
     	  
-    	   if (holder.image_back != null)
-    		   holder.image_back.setImageBitmap(bar.getImage());
- 		   holder.image_thumb.setImageBitmap(bar.getImage());
+    	   if (holder.image != null)
+    		   holder.image.setImageBitmap(bar.getImage());
+ 		   holder.logo.setImageBitmap(bar.getLogo());
     	 
     	   return convertView;
     	 
     	  }
     	 
     	 }
+
+	
     
     
 }

@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,13 +19,17 @@ public class Bar implements Parcelable{
 	 String rating = "0.0";
 	 String name = null;
 	 Bitmap image = null;
-	 int index = 0;
-	 Double lifeExpectancy = null;
-	 Double gnp = null;
-	 Double surfaceArea = null;
-	 int population = 0;
+	 Bitmap logo = null;
+	 int users = 0;
+	 String description = "";
+	 String schedule = "";
+	 String food = "";
+	 String music = "";
+	 double drink_price = 0;
+	 Context context;
 	 
-	 public Bar(){
+	 public Bar(Context context){
+		 this.context = context;
 	 }
 	  
 	 public String getRating() {
@@ -39,48 +44,68 @@ public class Bar implements Parcelable{
 	 public void setName(String name) {
 	  this.name = name;
 	 }
+	 public String getDescription() {
+	  return description;
+	 }
+	 public void setDescription(String description) {
+	  this.description = description;
+	 }
+	 public String getSchedule() {
+	  return schedule;
+	 }
+	 public void setSchedule(String schedule) {
+	  this.schedule = schedule;
+	 }
+	 public String getFood() {
+	  return food;
+	 }
+	 public void setFood(String food) {
+	  this.food = food;
+	 }
+	 public String getMusic() {
+	  return music;
+	 }
+	 public void setMusic(String music) {
+	  this.music = music;
+	 }
+	 public double getDrinkPrice() {
+	  return drink_price;
+	 }
+	 public void setDrinkPrice(double drink_price) {
+	  this.drink_price = drink_price;
+	 }
 	 public Bitmap getImage() {
 	  return image;
 	 }
 	 public void setImage(String url) {
 		 GetXMLTask task = new GetXMLTask();
+		 task.islogo = false;
          task.execute(new String[] { url });
 	 }
-	 public void setBitmap(Bitmap image){
+	 public void setBitmapImage(Bitmap image){
 		 this.image = image;
 	 }
-	 public int getIndex() {
-	  return this.index;
+	 
+	 public Bitmap getLogo() {
+		  return logo;
+		 }
+	 public void setLogo(String url) {
+		 GetXMLTask task = new GetXMLTask();
+		 task.islogo = true;
+         task.execute(new String[] { url });
 	 }
-	 public void setIndex(int index) {
-	  this.index = index;
+	 public void setBitmapLogo(Bitmap logo){
+		 this.logo = logo;
 	 }
-	 public Double getLifeExpectancy() {
-	  return lifeExpectancy;
+	 public int getUsers() {
+	  return this.users;
 	 }
-	 public void setLifeExpectancy(Double lifeExpectancy) {
-	  this.lifeExpectancy = lifeExpectancy;
-	 }
-	 public Double getGnp() {
-	  return gnp;
-	 }
-	 public void setGnp(Double gnp) {
-	  this.gnp = gnp;
-	 }
-	 public Double getSurfaceArea() {
-	  return surfaceArea;
-	 }
-	 public void setSurfaceArea(Double surfaceArea) {
-	  this.surfaceArea = surfaceArea;
-	 }
-	 public int getPopulation() {
-	  return population;
-	 }
-	 public void setPopulation(int population) {
-	  this.population = population;
+	 public void setUsers(int users) {
+	  this.users = users;
 	 }
 	 
 	 private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
+		 public boolean islogo;
 	        @Override
 	        protected Bitmap doInBackground(String... urls) {
 	            Bitmap map = null;
@@ -93,9 +118,24 @@ public class Bar implements Parcelable{
 	        // Sets the Bitmap returned by doInBackground
 	        @Override
 	        protected void onPostExecute(Bitmap result) {
-	        	setBitmap(result);
+	        	if (islogo)
+	        		setBitmapLogo(scaleDownBitmap(result, 50, context));
+	        	else
+	        		setBitmapImage(scaleDownBitmap(result, 100, context));
 	        	MainActivity.updateBarList();
 	        }
+	        
+	        public Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
+
+	        	final float densityMultiplier = context.getResources().getDisplayMetrics().density;        
+			
+	        	int h= (int) (newHeight*densityMultiplier);
+	        	int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
+			
+	        	photo=Bitmap.createScaledBitmap(photo, w, h, true);
+			
+	        	return photo;
+			}
 	 
 	        // Creates Bitmap from InputStream and returns it
 	        private Bitmap downloadImage(String url) {
@@ -149,6 +189,12 @@ public class Bar implements Parcelable{
         out.writeString(name);
         out.writeString(rating);
         out.writeValue(image);
+        out.writeValue(logo);
+        out.writeString(description);
+        out.writeString(schedule);
+        out.writeString(food);
+        out.writeString(music);
+        out.writeDouble(drink_price);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
@@ -167,5 +213,11 @@ public class Bar implements Parcelable{
         name = in.readString();
         rating = in.readString();
         image = (Bitmap) in.readValue(null);
+        logo = (Bitmap) in.readValue(null);
+        description = in.readString();
+        schedule = in.readString();
+        food = in.readString();
+        music = in.readString();
+        drink_price = in.readFloat();
     }
 }

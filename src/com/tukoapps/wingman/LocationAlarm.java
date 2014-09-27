@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.tukoapps.wingman.MainActivity.RequestTask;
+import com.tukoapps.wingman.MyLocation.LocationResult;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -32,13 +33,22 @@ import android.view.View;
 
 public class LocationAlarm extends BroadcastReceiver  {
 	
+	private final static String TAG = "LOCATION ALARM";
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		Location loc = getLastLocation(context);
-		String id = intent.getExtras().getString("id");
-		Log.d("ALARM", "lat: " + loc.getLatitude() + ", lon: " + loc.getLongitude() + ", id = " + id);
-		new RequestTask().execute("http://www.get-wingman.com/api/v1/locations/new?user_id="+id+"&lat="+loc.getLatitude()+"&lon="+loc.getLongitude());
+		final String id = intent.getExtras().getString("id");
+		LocationResult locationResult = new LocationResult(){
+    	    @Override
+    	    public void gotLocation(Location location){
+    	        //Got the location!
+    	    	new RequestTask().execute("http://www.get-wingman.com/api/v1/locations/new?user_id="+id+"&lat="+location.getLatitude()+"&lon="+location.getLongitude());
+    	    	Log.d("ALARM", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude() + ", id = " + id);
+    	    }
+    	};
+    	MyLocation myLocation = new MyLocation();
+    	myLocation.getLocation(context, locationResult);
 	}
 	
 	public void SetAlarm(Context context, String id)
@@ -57,30 +67,6 @@ public class LocationAlarm extends BroadcastReceiver  {
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
-    }
-    
-    public static Location getLastLocation(Context context) {
-        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        List<String> providers = manager.getProviders(criteria, true);
-        List<Location> locations = new ArrayList<Location>();
-        for (String provider : providers) {
-             Location location = manager.getLastKnownLocation(provider);
-             if (location != null && location.getAccuracy() !=0.0) {
-                 locations.add(location);
-             }
-        }
-        Collections.sort(locations, new Comparator<Location>() {
-            @Override
-            public int compare(Location location, Location location2) {
-                return (int) (location.getAccuracy() - location2.getAccuracy());
-            }
-        });
-        if (locations.size() > 0) {
-            return locations.get(0);
-        }
-        return null;
     }
     
     class RequestTask extends AsyncTask<String, String, String>{

@@ -13,36 +13,42 @@
         android:id="@+id/image_back"
         android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
     
-    <ImageView
-        android:layout_width="138dip"
-        android:layout_height="138dip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="6dip"
-        android:layout_marginTop="6dip"
-        android:id="@+id/image_first"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
-        android:background="@drawable/white_border" />
-
-    <TextView
-        android:id="@+id/code_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_alignBottom="@+id/image_first"
-        android:layout_toRightOf="@+id/image_first"
-        android:text="Code: "
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFF" />
-
-    <TextView
-        android:id="@+id/name_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/code_first"
-        android:layout_alignLeft="@+id/code_first"
-        android:text="Name: "
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFF" />
+    <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="150dip"
+	    android:background="@drawable/linear_gradient">
+    
+	    <ImageView
+	        android:layout_width="138dip"
+	        android:layout_height="138dip"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginLeft="6dip"
+	        android:layout_marginTop="6dip"
+	        android:id="@+id/image_first"
+	        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+	        android:background="@drawable/white_border" />
+	
+	    <TextView
+	        android:id="@+id/code_first"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="15dp"
+	        android:layout_alignBottom="@+id/image_first"
+	        android:layout_toRightOf="@+id/image_first"
+	        android:text="Code: "
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFF" />
+	
+	    <TextView
+	        android:id="@+id/name_first"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/code_first"
+	        android:layout_alignLeft="@+id/code_first"
+	        android:text="Name: "
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="#FFF" />
+	 </RelativeLayout>
  
 </RelativeLayout>

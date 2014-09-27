@@ -67,14 +67,14 @@ public class LaunchActivity extends FragmentActivity{
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         button = (LoginButton) findViewById(R.id.authButton);
         button.setVisibility(View.INVISIBLE);
-        Session session = Session.getActiveSession();
-	    if (session != null &&
-	           (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
-	    }else{
+//        Session session = Session.getActiveSession();
+//	    if (session != null &&
+//	           (session.isOpened() || session.isClosed()) ) {
+//	        onSessionStateChange(session, session.getState(), null);
+//	    }else{
 	    	spinner.setVisibility(View.INVISIBLE);
     		button.setVisibility(View.VISIBLE);
-	    }
+//	    }
         
         
 //        
@@ -107,11 +107,11 @@ public class LaunchActivity extends FragmentActivity{
     public void onResume() {
         super.onResume();
         
-        Session session = Session.getActiveSession();
-	    if (session != null &&
-	           (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
-	    }
+//        Session session = Session.getActiveSession();
+//	    if (session != null &&
+//	           (session.isOpened() || session.isClosed()) ) {
+//	        onSessionStateChange(session, session.getState(), null);
+//	    }
         uiHelper.onResume();
     }
  
